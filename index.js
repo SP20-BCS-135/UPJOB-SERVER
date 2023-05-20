@@ -19,3 +19,4 @@ app.use("/api/jobs", require("./routes/jobs"));
 app.listen(port, () => {
   console.log(`JOBUP app listening at http://localhost:${port}`);
 });
+ 
