@@ -10,7 +10,6 @@ const { body, validationResult } = require("express-validator");
 router.get('/getjobs/:en', async (req, res) => {
     try {
         const en = req.params.en.toString();
-
         const jobs = await Jobs.find({ 'hiring.en': en }).populate('posterId');
         res.status(200).json({ success: true, data: jobs });
 
@@ -19,6 +18,20 @@ router.get('/getjobs/:en', async (req, res) => {
         res.status(500).json({ success: false, error: 'Server error' });
     }
 });
+
+// Get all jobs matching given profession route: GET /api/jobs
+router.get('/deletejob/:id', async (req, res) => {
+    try {
+        const id = req.params.id
+        const jobs = await Jobs.deleteOne({ _id: id });
+        res.status(200).json({ success: true, data: jobs });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, error: 'Server error' });
+    }
+});
+
 
 // Get all jobs posted by a particular user route: GET /api/jobs/poster/:posterId
 router.get('/poster/:posterId', async (req, res) => {
