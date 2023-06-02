@@ -7,10 +7,11 @@ const { body, validationResult } = require("express-validator");
 
 
 // Get all jobs matching given profession route: GET /api/jobs
-router.get('/getjobs/:en', async (req, res) => {
+router.get('/getjobs/:country/:en', async (req, res) => {
     try {
         const en = req.params.en.toString();
-        const jobs = await Jobs.find({ 'hiring.en': en }).populate('posterId');
+        const country = req.params.country;
+        const jobs = await Jobs.find({ 'hiring.en': en, country }).populate('posterId');
         res.status(200).json({ success: true, data: jobs });
 
     } catch (err) {
@@ -67,15 +68,16 @@ router.post('/postjob', [
     body('budget').notEmpty().withMessage('Budget is required'),
     body('posterId').notEmpty().withMessage('PosterId is required'),
     body('hiring').notEmpty().withMessage('Hiring is required'),
+    body('country').notEmpty().withMessage('Hiring is required'),
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { title, description, budget, posterId, hiring, bids } = req.body;
+    const { title, description, budget, posterId, hiring, bids, country } = req.body;
     try {
-        const job = new Jobs({ title, description, budget, posterId, hiring, bids });
+        const job = new Jobs({ title, description, budget, posterId, hiring, bids, country });
         await job.save();
         res.json({ success: true, job });
     } catch (err) {

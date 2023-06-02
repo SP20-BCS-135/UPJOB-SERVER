@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post('/sendmail', sendMail, async (req, res) => {
 
-  const { email, pincode, expiry } = req.body; 
+  const { email, pincode, expiry } = req.body;
 
   verify.create({ email, pin: pincode })
     .then(() => {
@@ -130,11 +130,13 @@ router.post(
       email: user.email,
       contact: user.contact,
       city: user.city,
+      country: user.country,
       imageUrl: user.imageUrl,
       type: user.type,
       profession: user.profession,
       experience: user.experience,
       imageCollectionUrl: user.imageCollectionUrl,
+
     }
 
 
@@ -152,12 +154,13 @@ router.post(
     body("password", "must be min 5 chars").isLength({ min: 5 }),
     body("name").exists(),
     body("city").exists(),
+    body("country").exists(),
     body("type").exists(),
     body("pin").exists(),
     body("contact").exists(),
   ],
   async (req, res) => {
-    const { name, email, password, city, type, contact, profession, imageUrl, experience, pin, imageCollectionUrl } = req.body;
+    const { name, email, password, city, type, contact, profession, imageUrl, experience, pin, imageCollectionUrl, country } = req.body;
 
     //express-validation
     const errors = validationResult(req);
@@ -194,6 +197,7 @@ router.post(
               experience,
               imageUrl,
               city,
+              country,
               type,
               imageCollectionUrl,
               password: hashedPass,
@@ -213,6 +217,7 @@ router.post(
                     email: user.email,
                     contact: user.contact,
                     city: user.city,
+                    country: user.country,
                     imageUrl: user.imageUrl,
                     type: user.type,
                     profession: user.profession,
@@ -260,6 +265,7 @@ router.post(
                 name: user.name,
                 email: user.email,
                 city: user.city,
+                country: user.country,
                 type: user.type,
                 profession: user.profession,
                 experience: user.experience,

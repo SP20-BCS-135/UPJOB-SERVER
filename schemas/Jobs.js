@@ -46,6 +46,10 @@ const jobSchema = new mongoose.Schema({
         type: multiLang,
         required: true
     },
+    country: {
+        type: String,
+        required: true
+    },
     bids: [bidderSchema]
 },
     { timestamps: true }
